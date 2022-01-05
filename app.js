@@ -11,7 +11,6 @@ const client = new Client({
 const player = new Player(client, { leaveOnEmpty: false });
 
 const settings = {
-  prefix: '!',
   token: process.env.BOTTOKEN
 };
 
@@ -31,16 +30,16 @@ async function searchYoutube(key) {
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setPresence({ activities: [{ name: '!help' }], status: 'online' });
+  client.user.setPresence({ activities: [{ name: '-help' }], status: 'online' });
 });
 
 client.on('messageCreate', async (message) => {
   try {
-    const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
+    const args = message.content.trim().split(/ +/g);
     const command = args.shift();
     let guildQueue = client.player.getQueue(message.guild.id);
     switch(command) {
-      case 'play':
+      case '-play':
         let queue = client.player.createQueue(message.guild.id);
         await queue.join(message.member.voice.channel);
         let target = args.join(' ');
@@ -59,7 +58,7 @@ client.on('messageCreate', async (message) => {
         });
         message.channel.send({ embeds: [embed] });
         break;
-      case 'skip':
+      case '-skip':
         if (guildQueue) guildQueue.skip();
         message.channel.send({ embeds: [
           new MessageEmbed()
@@ -67,10 +66,10 @@ client.on('messageCreate', async (message) => {
             .setDescription(guildQueue ? '嫌我吵是嗎 ?' : '沒有東西在播啊 三小')
         ]});
         break;
-      case 'dog':
+      case '-dog':
         message.channel.send('不能亂叫不然會被刪掉 QQ');
         break;
-      case 'help':
+      case '-help':
         message.channel.send({ embeds: [
           new MessageEmbed()
             .setColor('#62df88')
@@ -79,8 +78,8 @@ client.on('messageCreate', async (message) => {
             .setDescription('我是 MUDOG 這裡告訴你怎麼操作我 ( 上面有連結 )')
             .setAuthor({ name: 'SUDOG', iconURL: 'https://i.imgur.com/RpvrOI2.jpg' })
             .addFields(
-              { name: '!play', value: '播放 youtube 影音（ 可佇列 ）. 例 : !play ${ 關鍵字 or youtube 網址 }', inline: false },
-              { name: '!skip', value: '跳過當前播放的影音', inline: false },
+              { name: '-play', value: '播放 youtube 影音（ 可佇列 ）. 例 : !play ${ 關鍵字 or youtube 網址 }', inline: false },
+              { name: '-skip', value: '跳過當前播放的影音', inline: false },
             )
         ]});
     }
