@@ -75,7 +75,8 @@ client.on('messageCreate', async (message) => {
           new MessageEmbed()
             .setColor('#62df88')
             .setTitle('指令列表')
-            .setDescription('指令列表清單')
+            .setURL('https://github.com/mrmosssir/discord-mudog')
+            .setDescription('我是 MUDOG 這裡告訴你怎麼操作我 ( 上面有連結 )')
             .setAuthor({ name: 'SUDOG', iconURL: 'https://i.imgur.com/RpvrOI2.jpg' })
             .addFields(
               { name: '!play', value: '播放 youtube 影音（ 可佇列 ）. 例 : !play ${ 關鍵字 or youtube 網址 }', inline: false },
