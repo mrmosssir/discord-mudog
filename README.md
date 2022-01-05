@@ -1,7 +1,7 @@
 # discord-mudog
 
-### Join MUDOG 
-click [Link](https://discord.com/api/oauth2/authorize?client_id=746198610961498194&permissions=8&scope=bot) to join MUDOG for your discord server.
+### Invite MUDOG 
+click [Link](https://discord.com/api/oauth2/authorize?client_id=746198610961498194&permissions=8&scope=bot) invite MUDOG to your discord server.
 
 ### Command
 ```!help - show command list.```  
