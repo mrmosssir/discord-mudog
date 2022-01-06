@@ -41,6 +41,10 @@ client.on('messageCreate', async (message) => {
     switch(command) {
       case '-play':
         let queue = client.player.createQueue(message.guild.id);
+        if (!message.member.voice.channel) {
+          message.react('💩');
+          return;
+        }
         await queue.join(message.member.voice.channel);
         let target = args.join(' ');
         let result = {};
