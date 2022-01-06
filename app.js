@@ -59,15 +59,14 @@ client.on('messageCreate', async (message) => {
         message.channel.send({ embeds: [embed] });
         break;
       case '-skip':
-        if (guildQueue) guildQueue.skip();
-        message.channel.send({ embeds: [
-          new MessageEmbed()
-            .setColor(guildQueue ? '#0099ff' : '#ff9900')
-            .setDescription(guildQueue ? '嫌我吵是嗎 ?' : '沒有東西在播啊 三小')
-        ]});
-        break;
-      case '-dog':
-        message.channel.send('不能亂叫不然會被刪掉 QQ');
+        if (guildQueue) {
+          message.react('👌');
+          guildQueue.skip();
+        } else {
+          message.channel.send({ embeds: [
+            new MessageEmbed().setColor('#ff9900').setDescription('沒有東西在播啊 三小')
+          ]});
+        }
         break;
       case '-help':
         message.channel.send({ embeds: [
