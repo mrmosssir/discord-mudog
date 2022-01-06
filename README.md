@@ -5,7 +5,7 @@ click [Link](https://discord.com/api/oauth2/authorize?client_id=7461986109614981
 
 ### Command
 ```-help - show command list.```  
-```-play - play youtube music. Example: !play { "video keyword" or "video url" }.```  
+```-play - play youtube music. Example: !play < video keyword | video url >.```  
 ```-skip - skip music.```
 
 ### Wishing fountain
