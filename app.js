@@ -35,7 +35,7 @@ client.on('ready', () => {
 
 client.on('messageCreate', async (message) => {
   try {
-    const args = message.content.trim().split(/ +/g);
+    const args = message.content.trim().toLowerCase().split(/ +/g);
     const command = args.shift();
     let guildQueue = client.player.getQueue(message.guild.id);
     switch(command) {
