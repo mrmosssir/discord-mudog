@@ -64,7 +64,7 @@ client.on('messageCreate', async (message) => {
             .setTitle('指令列表')
             .setURL('https://github.com/mrmosssir/discord-mudog')
             .setDescription('我是 MUDOG 這裡告訴你怎麼操作我 ( 上面有連結 )')
-            .setAuthor({ name: 'SUDOG', iconURL: 'https://i.imgur.com/RpvrOI2.jpg' })
+            .setAuthor({ name: 'MUDOG', iconURL: 'https://i.imgur.com/RpvrOI2.jpg' })
             .addFields(
               { name: '-play', value: '播放 youtube 影音（ 可佇列 ) 例 : -play < 關鍵字 | youtube 網址 >', inline: false },
               { name: '-skip', value: '跳過當前播放的影音', inline: false },
