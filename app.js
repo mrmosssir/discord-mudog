@@ -1,4 +1,4 @@
-const axios = require('axios');
+const { searchByKeyword, searchByUrl } = require('./modules/youtube_process.js');
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const { Player } = require("discord-music-player");
 const client = new Client({
@@ -9,24 +9,7 @@ const client = new Client({
   ]
 });
 const player = new Player(client, { leaveOnEmpty: false });
-
-const settings = {
-  token: process.env.BOTTOKEN
-};
-
 client.player = player;
-
-async function searchYoutube(key) {
-  const base = process.env.YTBASEURL;
-  const apiKey = process.env.YTAPIKEY;
-  const url = encodeURI(`${base}/?key=${apiKey}&part=snippet&maxResult=1&q=${key}`)
-  const res = await axios.get(url);
-  const list = res.data.items[0];
-  return {
-    title: list.snippet.title,
-    url: `https://www.youtube.com/watch?v=${list.id.videoId}`,
-  }
-}
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -40,27 +23,27 @@ client.on('messageCreate', async (message) => {
     let guildQueue = client.player.getQueue(message.guild.id);
     switch(command) {
       case '-play':
-        let queue = client.player.createQueue(message.guild.id);
         if (!message.member.voice.channel) {
           message.react('💩');
           return;
         }
+        const queue = client.player.createQueue(message.guild.id);
+        const params = args.join(' ');
+        const video = params.indexOf('youtube.com') < 0
+          ? await searchByKeyword(params)
+          : await searchByUrl(params);
+
         await queue.join(message.member.voice.channel);
-        let target = args.join(' ');
-        let result = {};
-        if (target.indexOf('youtube.com') < 0) {
-          result = await searchYoutube(target);
-          target = result.url;
-        }
-        const embed = new MessageEmbed()
-          .setColor('#0099ff')
-          .setURL(result.url ? result.url : target)
-          .setTitle(result.title ? result.title : target)
-          .setDescription('已新增到播放清單')
-        let song = await queue.play(target).catch(_ => {
+        await queue.play(video.url).catch(_ => {
           if(!guildQueue) queue.stop();
         });
-        message.channel.send({ embeds: [embed] });
+        message.channel.send({ embeds: [
+          new MessageEmbed()
+            .setColor('#0099ff')
+            .setURL(video.url)
+            .setTitle(video.title)
+            .setDescription('已新增到播放清單')
+        ]});
         break;
       case '-skip':
         if (guildQueue) {
@@ -68,7 +51,9 @@ client.on('messageCreate', async (message) => {
           guildQueue.skip();
         } else {
           message.channel.send({ embeds: [
-            new MessageEmbed().setColor('#ff9900').setDescription('沒有東西在播啊 三小')
+            new MessageEmbed()
+              .setColor('#ff9900')
+              .setDescription('沒有東西在播啊 三小')
           ]});
         }
         break;
@@ -87,12 +72,13 @@ client.on('messageCreate', async (message) => {
         ]});
     }
   } catch (error) {
-    console.log(error);
-    const embed = new MessageEmbed()
-      .setColor('#ff0000')
-      .setDescription('未知的錯誤 - 這什麼 這到底是什麼爛東西 歐齁齁齁');
-    message.channel.send({ embeds: [embed] });
+    console.log(error); 
+    message.channel.send({ embeds: [
+      new MessageEmbed()
+        .setColor('#ff0000')
+        .setDescription('未知的錯誤 - 這什麼 這到底是什麼爛東西 歐齁齁齁')
+    ]});
   }
 });
 
-client.login(settings.token);
+client.login(process.env.BOTTOKEN);
